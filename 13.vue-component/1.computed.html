@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{ fullName }} 
+        {{msg}}
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <!-- computed 和 method的区别 -->
+    <!-- computed 和 watch 区别  watch可以支持异步 -->
+    <!-- watch 可以实现一些简单的功能 会先去想能不能用计算属性实现 -->
+    <script>
+         let vm = new Vue({
+             el:'#app',
+             data:{
+                 firstName:'珠',
+                 lastName:'峰',
+                 msg:'hello',
+                 fullName:''
+             },
+            //  mounted(){ // 在不同的阶段会被调用 钩子函数
+            //     this.getFullName();
+            //  },
+             methods:{
+                getFullName(){
+                    this.fullName = this.firstName + this.lastName
+                }
+             },
+             watch:{ // vm.$watch('firstname',()=>{})
+                firstName:{
+                    handler(newValue){
+                        setTimeout(()=>{
+                            this.getFullName();
+                        },1000)
+                    },
+                    immediate:true // deep:true
+                },
+                lastName(){
+                    this.getFullName();
+                }
+             },
+             computed:{ // Object.defineProperty来实现
+                fullName(){ // get方法,有缓存 如果值没有更改会从缓存中取值
+                    return this.firstName + this.lastName
+                }
+             },
+            //  methods:{
+            //      getFullName(){
+            //          console.log('哈哈')
+            //          return this.firstName + this.lastName
+            //      }
+            //  }
+         })
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 在服务端中没有 ../ ./ -->
+    <link rel="stylesheet" href="/1.css">
+</head>
+<body>
+    <script>
+            // ajax xhr  axios  => promise  fetch
+            let xhr = new XMLHttpRequest();
+            // 如果我们使用非简单请求 put  delete 
+            // 传递了一个自定义请求头
+            // options prefight 预检
+            xhr.open('PUT','http://localhost:3000/userList',true);
+            xhr.responseType = 'json';
+           
+            xhr.withCredentials = true; // 我必须要带上cookie
+            document.cookie = 'token=100'; // 凭证  默认跨域不支持cookie
+            xhr.setRequestHeader('token','asd.askfs.g')
+            xhr.onreadystatechange = function(){
+                if(xhr.status === 200 && xhr.readyState === 4){
+                    console.log( xhr.response);
+                }
+            }
+            xhr.send();
+    </script>
+</body>
+</html>

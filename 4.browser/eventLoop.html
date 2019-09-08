@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        setTimeout(() => {
+            console.log('timeout1');
+            Promise.resolve().then(data=>{
+                console.log('then1')
+            });
+            Promise.resolve().then(data=>{
+                console.log('then1');
+                Promise.resolve().then(data=>{
+                    console.log('then3')
+                });
+            });
+            Promise.resolve().then(data=>{
+                console.log('then1')
+            });
+        }, 0);     
+        Promise.resolve().then(data=>{
+            console.log('then2');
+            setTimeout(() => {
+                console.log('timeout2');
+            }, 0);  
+        });
+        // 会取出一个宏任务去放到当前浏览器的执行环境中执行
+        // 当前执行环境都执行完毕后 会先在去清空微任务
+        // then2 timeout1  then1 / timeout2
+
+        // 在全局上下文中执行代码 会从上到下执行，
+        // 执行时可能会触发异步方法，如果是微任务直接放到队列中
+        // 定时器方法 会缓存起来。(时间到达后，会放到宏任务队列中)
+        // 等待当前上下文全部执行后，取出所有微任务开始执行
+        // 微任务全部执行后 会查看宏任务队列中是否有完成的，
+        // 如果有取出来一个继续执行，循环上述过程
+
+    </script>
+</body>
+</html>

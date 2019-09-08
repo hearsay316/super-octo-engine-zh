@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 在父级中使用的数据 就是父亲的 -->
+        <my-button :msg="content" a="1" b="2"></my-button>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({ // 根实例
+            el:'#app',
+            data:{ 
+                content:'点我啊'
+            },
+            components:{
+                'MyButton':{
+                    mounted(){
+                        // 对没有使用的属性 把他保留在 this.$attrs中
+                        console.log(this.$attrs)
+                    },
+                    inheritAttrs:false, // 没有用到的数据 就不会显示在dom结构上了
+                    template:`<div>my-button <my v-bind="$attrs"></my></div>`,
+                    components:{
+                        'my':{
+                            props:['a','b'],
+                            template:`<span>{{a}} {{b}}</span>`
+                        }
+                    }
+                }
+            }
+        });
+        // 通过数据 传递给组件
+        
+    </script>
+</body> 
+</html>

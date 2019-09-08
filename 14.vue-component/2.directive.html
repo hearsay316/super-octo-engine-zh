@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <button @click="flag=!flag">显示</button>
+        <div >
+            <input type="text" v-split.5="msg">
+        </div>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 指令 全局 局部
+        // 默认函数形式  ＝ update ＋ bind
+        // inserted 插入
+        // unbind  uncomponent
+        // Vue.directive('focus',{
+        //     inserted(el){
+        //         el.focus(); // 这个时机 会比 bind晚一些 只有 dom渲染完后执行
+        //     }
+        // });
+
+        Vue.directive('split',{
+            update(el,bindings,vnode){
+                let ctx = vnode.context;
+                el.value = ctx[bindings.expression];
+            },
+            bind(el,bindings,vnode){ // 只当用户绑定指令时生效
+               let ctx = vnode.context;
+               let [,len] = bindings.rawName.split('.'); // {2:true}
+               el.addEventListener('input',(e)=>{
+                  let val =  e.target.value.slice(0,len); // 输入框中的内容
+                  ctx[bindings.expression] = val;
+                  el.value = val;
+               });
+               // 赋予默认值
+               el.value = ctx[bindings.expression].slice(0,3);
+            }
+        });
+        // Vue.directive('split',{
+        //     update(el,bindings,vnode){
+        //         console.log('update')
+        //         let ctx = vnode.context;  // 获取当前输入框所在的上下文
+        //         // 去当前上下文中 获取 msg变量 把输入的内容 截取3个 放到msg中
+        //         ctx[bindings.expression] =  el.value.slice(0,3);
+        //     },
+        //     bind(el,bindings,vnode){ // 只当用户绑定指令时生效
+        //         let ctx = vnode.context;  // 获取当前输入框所在的上下文
+        //         // 去当前上下文中 获取 msg变量 把输入的内容 截取3个 放到msg中
+        //         ctx[bindings.expression] =  el.value.slice(0,3);
+        //     }
+        // });
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                flag:false,
+                msg:'a'
+            }
+        });
+    </script>
+</body>
+</html>

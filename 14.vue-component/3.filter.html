@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{name | capitalize(4)}}
+        <my-component></my-component>
+    </div>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+        // 过滤器 也是有全局  局部
+        // 指令和过滤器函数中的this都是window
+
+        // webpack 的懒加载来使用
+        Vue.component('my-component',function(resolve){
+            setTimeout(()=>{
+                resolve({
+                    template:'<h1>hello</h1>'
+                })
+            },5000);
+        });
+        Vue.filter('capitalize',function(value,len){
+            return value.slice(0,len).toUpperCase() + value.slice(len);
+        }); // 过滤器 不会改变原数据
+        // 只改变数据的展示形式 并不会改变原数据 computed
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                flag:false,
+                name:'zfjg'
+            },
+        });
+    </script>
+</body>
+</html>
+
+<!-- 
+    sudo npm install @vue/cli -g   .vue
+    sudo npm install -g @vue/cli-service-global
+
+    vue－cli 写两个组件 （cli配置）
+    vue-router 钩子的用法
+    vuex  模块的  
+    axios 获取数据
+    jwt 实现 权限   vuex + jwt 鉴权
+
+    mvvm 原理  computed  methods 方法 data 8.00 - 10.30
+
+    element-ui  ivew  (mint-ui)
+-->

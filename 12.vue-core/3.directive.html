@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 内部会进行缓存 以后使用的都是缓存里的结果 -->
+       <div v-once>{{msg}}</div>
+       <!-- v-html  innerHTML XSS攻击  不能将用户输入的内容展现出来 内容必须是可信任的-->
+       <div v-html="d"></div>
+        <!-- v-if 如果不成里 dom就会消失 -->
+        <!-- v-if 控制的是 dom 有没有 v-show控制的是样式   -->
+        <!-- v-show不支持template -->
+        <template v-show="flag">
+            <div>hello</div>
+            <div >123</div>
+        </template>
+       <div>312</div>
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                msg:'hello',
+                d:'<h1>hello</h1>',
+                flag:false
+            }
+        });
+        
+    </script>
+</body>
+</html>
